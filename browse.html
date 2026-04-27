@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Browse Comedy Shows Tonight &amp; Beyond — Movie Fox</title>
+    <meta name="description" content="Explore every genre in Movie Fox&#39;s full library. From adam sandler stand up to blockbuster films, find your next obsession with real-time search and scrollable rows.">
+    <meta name="keywords" content="comedy shows tonight, adam sandler stand up, browse movies, TV show library, streaming catalog">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: '7df5dac0-3ba4-4530-b0d2-d6887e0981b7',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="Browse Comedy Shows Tonight &amp; Beyond — Movie Fox">
+    <meta property="og:description" content="Explore every genre in Movie Fox&#39;s full library. From adam sandler stand up to blockbuster films, find your next obsession with real-time search and scrollable rows.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Browse Comedy Shows Tonight &amp; Beyond — Movie Fox">
+    <meta name="twitter:description" content="Explore every genre in Movie Fox&#39;s full library. From adam sandler stand up to blockbuster films, find your next obsession with real-time search and scrollable rows.">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-light) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-light) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-light) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="mobile-lang-menu-deployed-css">
+    @media (max-width: 768px) {
+      .lang-switcher,
+      .nav-cta-container .lang-switcher,
+      .nav-container .lang-switcher,
+      .navbar .lang-switcher,
+      .navbar .nav-cta-container .lang-switcher,
+      .nav-icons-left .lang-switcher,
+      .nav-ecommerce-icons .lang-switcher { display: none !important; }
+      .mobile-lang-menu { width: 100%; border-top: 1px solid rgba(128,128,128,0.2); padding: 8px 0 0 0; margin-top: 8px; }
+      .mobile-lang-toggle { display: flex !important; align-items: center; justify-content: space-between; width: 100%; padding: 12px 16px; background: none; border: none; cursor: pointer; font-size: 15px; color: inherit; font-family: inherit; }
+      .mobile-lang-toggle::after { content: ''; display: inline-block; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.3s ease; margin-left: 8px; }
+      .mobile-lang-toggle.expanded::after { transform: rotate(-135deg); }
+      .mobile-lang-options { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+      .mobile-lang-options.expanded { max-height: 300px; }
+      .mobile-lang-option { display: flex !important; align-items: center; gap: 10px; padding: 10px 24px; text-decoration: none; color: inherit; font-size: 14px; font-family: inherit; }
+      .mobile-lang-option:hover { background: rgba(128,128,128,0.1); }
+      .mobile-lang-option.active { font-weight: 600; opacity: 0.7; pointer-events: none; }
+      .mobile-lang-option img { width: 20px; height: 20px; border-radius: 50%; }
+    }
+    @media (min-width: 769px) {
+      .mobile-lang-menu { display: none !important; }
+    }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      #mic-access-tool-general-button, .mic-access-tool-general-button,
+      #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+      ._access-icon, #mic-access-tool-box, .mic-access-tool-box,
+      #mic-init-access-tool #mic-access-tool-box, div[id*="mic-access-tool-box"], ._access-menu {
+        display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+      }
+    </style>
+</head>
+<body>
+
+  <nav class="navbar">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/movie-fox-entertainment-streaming-media-logo.webp" alt="Movie Fox" class="logo" />
+      </a>
+    </div>
+
+    <ul class="nav-menu" id="navMenu"><li><a href="/browse">Browse Library</a></li><li><a href="/title-detail">Title Detail</a></li><li><a href="/favorites">Favorites</a></li></ul>
+
+    <div class="nav-cta-container">
+      <a href="/contact" class="nav-cta-btn">Contact</a>
+    </div>
+  </div>
+</nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '50%', 'important');
+          mobileToggle.style.setProperty('transform', 'translateY(-50%)', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '50%', 'important');
+          phoneBtn.style.setProperty('transform', 'translateY(-50%)', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu on button click - use newToggle now
+    newToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = this.querySelector('.hamburger-icon');
+      const closeIcon = this.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    });
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // === WHATSAPP BUTTON VISIBILITY FIX ===
+    // Ensure WhatsApp floating button is hidden on desktop and visible on mobile
+    // IMPORTANT: Only target the floating button by its class, NOT generic wa.me links
+    const handleWhatsAppVisibility = function() {
+      const whatsappBtn = document.querySelector('.whatsapp-float');
+      if (whatsappBtn) {
+        const isDesktop = window.innerWidth >= 769;
+        if (isDesktop) {
+          whatsappBtn.style.setProperty('display', 'none', 'important');
+          whatsappBtn.style.setProperty('visibility', 'hidden', 'important');
+          whatsappBtn.style.setProperty('opacity', '0', 'important');
+          whatsappBtn.style.setProperty('pointer-events', 'none', 'important');
+          console.log('[WhatsApp] Button hidden on desktop');
+        } else {
+          whatsappBtn.style.removeProperty('display');
+          whatsappBtn.style.removeProperty('visibility');
+          whatsappBtn.style.removeProperty('opacity');
+          whatsappBtn.style.removeProperty('pointer-events');
+          console.log('[WhatsApp] Button visible on mobile');
+        }
+      }
+    };
+    
+    // Run on load
+    handleWhatsAppVisibility();
+    
+    // Run on resize with debouncing
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(handleWhatsAppVisibility, 100);
+    });
+  });
+})();
+
+</script>
+  
+  <main>
+    <section class="browse-library-intro-section" data-layout-spec="Browse Library-intro">
+  <div class="bli-container">
+
+    <!-- Intro Header -->
+    <div class="bli-header">
+      <h1 class="bli-title">Browse Movies and TV Shows</h1>
+      <p class="bli-subtitle">Search thousands of titles by name and unlock dynamic discovery across every genre — from blockbuster action to cult comedy shows tonight. Whether you're hunting for a dave chappelle show deep-cut or the latest Sci-Fi epic, your next favorite is one search away.</p>
+    </div>
+
+    <!-- Search Bar Mockup -->
+    <div class="bli-search-bar">
+      <div class="bli-search-icon">
+        <svg data-no-icon-edit="true" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+      <span class="bli-search-placeholder">Search movies, TV shows, genres…</span>
+      <div class="bli-search-shortcut"><span>⌘</span><span>K</span></div>
+    </div>
+
+    <!-- Category Chips -->
+    <div class="bli-chips-row">
+      <span class="bli-chip bli-chip--active">All</span>
+      <span class="bli-chip">Action</span>
+      <span class="bli-chip">Comedy</span>
+      <span class="bli-chip">Drama</span>
+      <span class="bli-chip">Horror</span>
+      <span class="bli-chip">Sci-Fi</span>
+      <span class="bli-chip">TV Shows</span>
+      <span class="bli-chip">Movies</span>
+    </div>
+
+    <!-- Title Grid -->
+    <div class="bli-grid">
+
+      <!-- Card 1 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-1" data-context="Cinematic movie poster for a high-octane action thriller — dark dramatic lighting, explosive visual composition, suited for a premium streaming platform dark UI" width="300" height="450" src="/assets/site-browse-library-intro-image-1.webp" alt="Action thriller movie poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Action</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Neon Pursuit</h3>
+          <p class="bli-card-desc">A rogue agent races through neon-lit streets to expose a global conspiracy before time runs out.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-2" data-context="Vibrant comedy TV show poster with bold colors, fun expressive characters, and playful typography on a dark streaming platform background" width="300" height="450" src="/assets/site-browse-library-intro-image-2.webp" alt="Comedy TV show poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Comedy</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Laugh Track</h3>
+          <p class="bli-card-desc">A stand-up comedian's life implodes when his adam sandler stand up special goes viral for all the wrong reasons.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-3" data-context="Moody dramatic film poster with deep shadows, a lone figure silhouetted against a stormy sky, cinematic and emotional, dark streaming platform aesthetic" width="300" height="450" src="/assets/site-browse-library-intro-image-3.webp" alt="Drama film poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Drama</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">The Last Accord</h3>
+          <p class="bli-card-desc">A celebrated pianist confronts his past when a mysterious letter arrives from a family he thought he'd left behind.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-4" data-context="Terrifying horror movie poster with dark atmospheric imagery, eerie shadows, glowing eyes in darkness, premium streaming platform dark UI" width="300" height="450" src="/assets/site-browse-library-intro-image-4.webp" alt="Horror movie poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Horror</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Hollow Creek</h3>
+          <p class="bli-card-desc">A group of hikers stumble upon an abandoned town where the residents vanished without a trace overnight.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-5" data-context="Futuristic sci-fi movie poster with glowing neon blues and purples, space imagery, sleek spacecraft, cinematic dark streaming platform aesthetic" width="300" height="450" src="/assets/site-browse-library-intro-image-5.webp" alt="Sci-Fi movie poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Sci-Fi</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Event Horizon X</h3>
+          <p class="bli-card-desc">When humanity's first interstellar probe returns, it brings back something that was never meant to leave the void.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-6" data-context="Stylish TV show series poster with ensemble cast silhouettes, bold title treatment, neon accents on a dark cinematic streaming platform background" width="300" height="450" src="/assets/site-browse-library-intro-image-6.webp" alt="TV show series poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">TV Shows</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Signal Zero</h3>
+          <p class="bli-card-desc">An elite team of hackers is recruited by a shadowy government agency to prevent a digital apocalypse.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 7 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-7" data-context="Gritty crime thriller movie poster with dark urban cityscape at night, rain-slicked streets, shadowy detective figure, premium dark streaming UI" width="300" height="450" src="/assets/site-browse-library-intro-image-7.webp" alt="Crime thriller movie poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Drama</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Midnight Verdict</h3>
+          <p class="bli-card-desc">A disgraced detective gets one last chance to solve the case that destroyed his career — and his family.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 8 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-8" data-context="Animated adventure movie poster with rich colorful world-building, fantastical landscapes, heroic characters, on a dark streaming platform background" width="300" height="450" src="/assets/site-browse-library-intro-image-8.webp" alt="Adventure animated movie poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Action</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Stormborn</h3>
+          <p class="bli-card-desc">A young warrior wielding ancient storm magic must unite warring clans before a forgotten god awakens.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 9 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-9" data-context="Romantic drama movie poster with warm golden tones, two figures in a cinematic embrace, emotional lighting, dark streaming platform aesthetic" width="300" height="450" src="/assets/site-browse-library-intro-image-9.webp" alt="Romantic drama movie poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Drama</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Before the Tide</h3>
+          <p class="bli-card-desc">Two strangers meet on a coastal town's last summer before it's swallowed by rising seas — and fall in love against all reason.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 10 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-10" data-context="Dark supernatural horror TV series poster with occult symbols, eerie candlelight, mysterious hooded figures, cinematic streaming platform dark UI" width="300" height="450" src="/assets/site-browse-library-intro-image-10.webp" alt="Supernatural horror TV series poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Horror</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">The Rite of Ash</h3>
+          <p class="bli-card-desc">A small-town pastor unravels a centuries-old cult ritual that has kept his congregation alive — at a terrible cost.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 11 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-11" data-context="Bold comedy series poster with bright energetic colors, comedic cast ensemble, playful graphic design elements, dark streaming platform background" width="300" height="450" src="/assets/site-browse-library-intro-image-11.webp" alt="Comedy series poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Comedy</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Flat 404</h3>
+          <p class="bli-card-desc">Four mismatched roommates navigate startup culture, bad dates, and worse landlords in this sharp urban comedy.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 12 -->
+      <article class="bli-card">
+        <div class="bli-card-poster">
+          <img data-placeholder="browse-library-intro-image-12" data-context="Epic science fiction space opera TV series poster with massive starships, alien worlds, sweeping cosmic vistas, neon glow accents, dark cinematic streaming UI" width="300" height="450" src="/assets/site-browse-library-intro-image-12.webp" alt="Space opera TV series poster" class="bli-poster-img">
+          <div class="bli-card-overlay"></div>
+          <span class="bli-card-badge">Sci-Fi</span>
+        </div>
+        <div class="bli-card-body">
+          <h3 class="bli-card-title">Outer Dominion</h3>
+          <p class="bli-card-desc">A galactic empire fractures as rebel factions, alien alliances, and ancient prophecies collide across the stars.</p>
+          <div class="bli-card-actions">
+            <button class="bli-btn-trailer"><i class="fa-solid fa-play" aria-hidden="true"></i> Watch Trailer</button>
+            <button class="bli-btn-fav" aria-label="Add to Favorites"><i class="fa-regular fa-heart" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+    <!-- /Title Grid -->
+
+  </div>
+
+  <!-- Bottom Divider: charcoal to off-white -->
+  <div class="bli-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1280 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bliDividerGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#121417" stop-opacity="0"></stop>
+          <stop offset="100%" stop-color="#F5F7FA" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,72 L0,32 Q160,18 320,28 T640,22 Q800,16 960,26 T1280,20 L1280,72 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section class="browse-library-catalog-section" data-layout-spec="Browse Library-catalog">
+  <div class="blc-container">
+
+    <!-- Band 1: Popular This Week -->
+    <div class="blc-band blc-band--popular">
+      <div class="blc-band-header">
+        <div class="blc-heading-group">
+          <span class="blc-accent-bar" aria-hidden="true"></span>
+          <div>
+            <h2 class="blc-band-title">Popular This Week</h2>
+            <p class="blc-band-desc">Our most-watched titles right now — from pulse-pounding action blockbusters to edge-of-your-seat dramas. Catch the trailers everyone is talking about, including acclaimed comedy shows tonight and breakout originals.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="blc-grid blc-grid--large">
+
+        <!-- Card 1 -->
+        <article class="blc-card">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-1" data-context="Cinematic movie poster for a high-octane action thriller film, dramatic lighting with deep shadows, a lone hero silhouette against an explosive cityscape backdrop, dark moody palette with orange fire accents, premium streaming platform aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EInferno%20Protocol%20action%20thriller%20poster%3C/text%3E%3C/svg%3E" alt="Inferno Protocol action thriller poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Action</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-rank-badge">01</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Inferno Protocol</h3>
+            <p class="blc-card-synopsis">A rogue operative uncovers a global conspiracy with only 48 hours to stop a catastrophic attack. Non-stop tension from frame one.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">2h 14m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 8.4</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="blc-card">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-2" data-context="Sci-fi movie poster with deep space background, neon blue and purple nebula swirls, a futuristic spacecraft silhouette, cinematic widescreen composition, premium streaming platform dark aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3ENebula%20Drift%20sci-fi%20film%20poster%3C/text%3E%3C/svg%3E" alt="Nebula Drift sci-fi film poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Sci-Fi</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-rank-badge">02</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Nebula Drift</h3>
+            <p class="blc-card-synopsis">When a deep-space crew discovers an alien signal, they must choose between humanity's survival and their own. Visually breathtaking.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">2h 28m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 9.1</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="blc-card">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-3" data-context="Stand-up comedy special poster featuring a charismatic comedian on stage bathed in warm spotlight, laughing audience silhouettes, bold typography, vibrant stage lighting in gold and amber, Netflix-style comedy special aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3ELights%20Out%20comedy%20special%20poster%3C/text%3E%3C/svg%3E" alt="Lights Out comedy special poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Comedy</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-rank-badge">03</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Lights Out: Live</h3>
+            <p class="blc-card-synopsis">A sold-out stand-up special that blends sharp social commentary with gut-busting punchlines — a landmark in modern comedy shows tonight.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">1h 22m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 9.3</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="blc-card">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-4" data-context="Psychological horror movie poster with a dark eerie forest at night, fog rolling between twisted trees, a pale ghostly figure in the distance, desaturated blue-green palette, unsettling and atmospheric, premium streaming platform horror aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EThe%20Hollow%20horror%20film%20poster%3C/text%3E%3C/svg%3E" alt="The Hollow horror film poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Horror</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-rank-badge">04</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">The Hollow</h3>
+            <p class="blc-card-synopsis">A family moves to a remote countryside estate only to uncover its centuries-old, terrifying secret. Atmospheric dread at its finest.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">1h 58m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 7.9</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="blc-card">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-5" data-context="Emotional drama film poster showing two people in a rain-soaked city street at night, reflective puddles, warm amber street lamps, cinematic bokeh background, intimate close-up framing, premium dark streaming aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3ELast%20Ember%20drama%20film%20poster%3C/text%3E%3C/svg%3E" alt="Last Ember drama film poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Drama</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-rank-badge">05</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Last Ember</h3>
+            <p class="blc-card-synopsis">Two estranged siblings reunite after a decade apart, forced to confront buried truths in a quietly devastating portrait of family and forgiveness.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2023</span>
+              <span class="blc-meta-tag">2h 05m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 8.7</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="blc-card">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-6" data-context="Crime thriller TV show poster with a detective in a dimly lit interrogation room, harsh overhead light casting dramatic shadows, gritty urban noir palette, dark blues and cool grays, premium streaming platform series aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3ECold%20Case%20Files%20TV%20series%20poster%3C/text%3E%3C/svg%3E" alt="Cold Case Files TV series poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Crime</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-rank-badge">06</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Cold Case Files</h3>
+            <p class="blc-card-synopsis">A seasoned detective obsessively reopens a 20-year-old unsolved murder, unraveling a web of corruption that reaches the highest levels of power.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">Series</span>
+              <span class="blc-meta-tag">S1 · 8 Ep</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 8.8</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- Band 2: New Trailer Picks -->
+    <div class="blc-band blc-band--trailers">
+      <div class="blc-band-header">
+        <div class="blc-heading-group">
+          <span class="blc-accent-bar" aria-hidden="true"></span>
+          <div>
+            <h2 class="blc-band-title">New Trailer Picks</h2>
+            <p class="blc-band-desc">Fresh drops added this week — handpicked trailers spanning every genre. Discover your next obsession before it hits the mainstream conversation.</p>
+          </div>
+        </div>
+        <a href="/contact" class="blc-see-all-btn">See All <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+
+      <div class="blc-grid blc-grid--standard">
+
+        <!-- Card 7 -->
+        <article class="blc-card blc-card--compact">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-7" data-context="Animated adventure film poster with vibrant fantastical world, lush magical forest with glowing flora, heroic young protagonist in center, rich jewel-toned color palette of emerald and gold, premium animated film streaming aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EEmerald%20Kingdom%20animated%20film%20poster%3C/text%3E%3C/svg%3E" alt="Emerald Kingdom animated film poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Animation</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-new-badge">NEW</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Emerald Kingdom</h3>
+            <p class="blc-card-synopsis">An orphaned mapmaker discovers a hidden realm and must restore its stolen magic before darkness consumes the land forever.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">1h 44m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 8.2</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 8 -->
+        <article class="blc-card blc-card--compact">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-8" data-context="Romantic comedy film poster with two people laughing in a sun-drenched European city square, warm golden hour lighting, playful typography, pastel accents, light and breezy streaming platform aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3ERoman%20Holiday%20rom-com%20film%20poster%3C/text%3E%3C/svg%3E" alt="Roman Holiday rom-com film poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Rom-Com</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-new-badge">NEW</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Roman Holiday</h3>
+            <p class="blc-card-synopsis">A travel writer and a free-spirited chef collide in Rome, turning a missed flight into the most unexpected adventure of their lives.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">1h 52m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 7.6</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 9 -->
+        <article class="blc-card blc-card--compact">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-9" data-context="Superhero action movie poster with a masked vigilante on a rain-slicked rooftop at night, city lights glowing below, dramatic cape billowing, dark blue and magenta color palette, cinematic premium streaming aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EShadow%20Vigil%20superhero%20film%20poster%3C/text%3E%3C/svg%3E" alt="Shadow Vigil superhero film poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Action</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-new-badge">NEW</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Shadow Vigil</h3>
+            <p class="blc-card-synopsis">A disgraced vigilante returns to a city overrun by a criminal syndicate, armed with nothing but raw skill and an unbreakable code.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">2h 08m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 8.0</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 10 -->
+        <article class="blc-card blc-card--compact">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-10" data-context="Documentary film poster about ocean conservation, stunning underwater photography with vibrant coral reef and sea life, deep turquoise water, rays of light filtering down, premium nature documentary streaming aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EBlue%20Depth%20documentary%20poster%3C/text%3E%3C/svg%3E" alt="Blue Depth documentary poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Documentary</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-new-badge">NEW</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Blue Depth</h3>
+            <p class="blc-card-synopsis">An immersive journey into the world's most remote ocean ecosystems, revealing the fragile beauty that lies beneath the surface.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">1h 36m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 9.0</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 11 -->
+        <article class="blc-card blc-card--compact">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-11" data-context="Dystopian sci-fi TV series poster with a crumbling futuristic city overgrown with vegetation, survivors in the foreground, dramatic overcast sky with orange and red tones, post-apocalyptic premium streaming series aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EAfter%20Eden%20dystopian%20TV%20series%20poster%3C/text%3E%3C/svg%3E" alt="After Eden dystopian TV series poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Sci-Fi</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-new-badge">NEW</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">After Eden</h3>
+            <p class="blc-card-synopsis">In a world reclaimed by nature after civilisation's collapse, a small band of survivors must rebuild society before winter arrives.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">Series</span>
+              <span class="blc-meta-tag">S1 · 10 Ep</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 8.5</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 12 -->
+        <article class="blc-card blc-card--compact">
+          <div class="blc-card-poster">
+            <img data-placeholder="browse-library-catalog-image-12" data-context="Historical epic film poster with a vast medieval battlefield at dawn, armored warriors in silhouette against a golden sunrise, dramatic sweeping landscape, rich earthy tones, premium cinematic streaming platform aesthetic" width="400" height="600" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EIron%20Crown%20historical%20epic%20film%20poster%3C/text%3E%3C/svg%3E" alt="Iron Crown historical epic film poster">
+            <div class="blc-card-overlay">
+              <span class="blc-category-tag">Epic</span>
+              <a href="/contact" class="blc-trailer-btn">
+                <i class="fas fa-play" aria-hidden="true"></i>
+                Watch Trailer
+              </a>
+            </div>
+            <div class="blc-new-badge">NEW</div>
+          </div>
+          <div class="blc-card-info">
+            <h3 class="blc-card-title">Iron Crown</h3>
+            <p class="blc-card-synopsis">A peasant soldier rises through the ranks of a crumbling empire, carrying the weight of a kingdom's last hope on his shoulders.</p>
+            <div class="blc-card-meta">
+              <span class="blc-meta-tag">2024</span>
+              <span class="blc-meta-tag">2h 42m</span>
+              <span class="blc-meta-rating"><i class="fas fa-star" aria-hidden="true"></i> 8.9</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Film-strip perforated divider -->
+  <div class="blc-divider-wrapper" aria-hidden="true">
+    <div class="blc-filmstrip-perforations">
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-hole"></span>
+      <span class="blc-perf-glint" style="left:8%"></span>
+      <span class="blc-perf-glint" style="left:31%"></span>
+      <span class="blc-perf-glint" style="left:57%"></span>
+      <span class="blc-perf-glint" style="left:79%"></span>
+    </div>
+  </div>
+
+</section>
+
+<section class="browse-library-benefits-section" data-layout-spec="Browse Library-benefits">
+  <div class="blb-container">
+
+    <!-- Section Header -->
+    <header class="blb-header">
+      <div class="blb-heading-accent" aria-hidden="true"></div>
+      <h2 class="blb-title">Why This Library Works.</h2>
+      <p class="blb-subtitle">A focused browsing experience built for enthusiasts, trailer hunters, and cinema students — all powered by sample data with no hosted copyrighted content.</p>
+    </header>
+
+    <!-- 2+1 Asymmetrical Panel Grid -->
+    <div class="blb-panels">
+
+      <!-- START side: two stacked cards -->
+      <div class="blb-stack">
+
+        <!-- Panel 1: Browse without clutter -->
+        <article class="blb-card blb-card--top">
+          <div class="blb-card-inner">
+            <div class="blb-icon-marker" aria-hidden="true">
+              <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="1" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.5"></rect>
+                <path d="M6 11h10M6 7h6M6 15h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+              </svg>
+            </div>
+            <div class="blb-card-content">
+              <h3 class="blb-card-title">Browse Without Clutter</h3>
+              <p class="blb-card-text">No ads interrupting your flow, no autoplay chaos. Movie Fox presents trailers and poster art in a clean, editorial grid so you can scan dozens of titles at a glance. Each card surfaces exactly what you need — title, genre tags, and a direct path to the trailer — without the noise that plagues mainstream platforms.</p>
+              <div class="blb-tag-row">
+                <span class="blb-tag">Clean UI</span>
+                <span class="blb-tag">Fast Discovery</span>
+              </div>
+            </div>
+          </div>
+          <figure class="blb-card-image-wrap">
+            <img data-placeholder="browse-library-benefits-image-1" data-context="A sleek dark cinema interface showing a clean grid of movie poster cards on a near-black background, with minimal UI chrome, neon magenta accent highlights, and a focused editorial layout that conveys clutter-free browsing for a premium streaming platform" width="560" height="260" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='260'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EClean%20movie%20browsing%20grid%20with%20no%20clutter%3C/text%3E%3C/svg%3E" alt="Clean movie browsing grid with no clutter" class="blb-card-img">
+            <div class="blb-img-overlay" aria-hidden="true"></div>
+          </figure>
+          <div class="blb-card-glow blb-card-glow--primary" aria-hidden="true"></div>
+        </article>
+
+        <!-- Panel 2: Compare genres quickly -->
+        <article class="blb-card blb-card--bottom">
+          <div class="blb-card-inner">
+            <div class="blb-icon-marker blb-icon-marker--cyan" aria-hidden="true">
+              <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+                <path d="M7 11l2.5 2.5L15 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div class="blb-card-content">
+              <h3 class="blb-card-title">Compare Genres Quickly</h3>
+              <p class="blb-card-text">Switch between Action, Drama, Horror, Sci-Fi, and Comedy in seconds. Category rows let you see how tone, pacing, and visual style differ across genres — ideal for anyone mapping the landscape of modern cinema or hunting for the next great comedy show tonight.</p>
+              <div class="blb-tag-row">
+                <span class="blb-tag">5 Genres</span>
+                <span class="blb-tag">Instant Filter</span>
+              </div>
+            </div>
+          </div>
+          <div class="blb-card-glow blb-card-glow--secondary" aria-hidden="true"></div>
+        </article>
+
+      </div>
+
+      <!-- END side: one tall card -->
+      <article class="blb-card blb-card--tall">
+        <figure class="blb-tall-image-wrap">
+          <img data-placeholder="browse-library-benefits-image-2" data-context="A cinematic film studies reference scene showing a dark home theater or study desk environment with a large screen displaying a dramatic movie trailer frame, film reels, and subtle neon cyan glow, evoking the feeling of studying trailers as cinematic references for a premium streaming media platform" width="480" height="580" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='580'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EStudying%20movie%20trailers%20as%20cinematic%20references%3C/text%3E%3C/svg%3E" alt="Studying movie trailers as cinematic references" class="blb-tall-img">
+          <div class="blb-tall-overlay" aria-hidden="true"></div>
+        </figure>
+        <div class="blb-tall-content">
+          <div class="blb-icon-marker blb-icon-marker--accent" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 5h16M3 11h10M3 17h13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+              <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+              <path d="M17 16l.8.8 1.7-1.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3 class="blb-card-title">Study Trailers as Cinematic References</h3>
+          <p class="blb-card-text">For cinema students and serious enthusiasts, trailers are compressed masterclasses in visual storytelling. Each embedded YouTube trailer in Movie Fox is a reference point — study how editors build tension, how directors establish tone in 90 seconds, or how studios position a film before release.</p>
+          <p class="blb-card-text">From the quick-cut energy of a Kevin Hart stand-up special promo to the brooding restraint of an arthouse drama, the range here is genuinely educational.</p>
+          <figure class="blb-inset-image-wrap">
+            <img data-placeholder="browse-library-benefits-image-3" data-context="A close-up of a dark cinematic interface showing an embedded YouTube trailer player with movie details panel, genre tags, and a favorites button, set against a deep charcoal background with neon magenta accent glow, representing the Movie Fox trailer study experience" width="400" height="220" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='220'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EEmbedded%20YouTube%20trailer%20detail%20view%20with%20genre%20tags%3C/text%3E%3C/svg%3E" alt="Embedded YouTube trailer detail view with genre tags" class="blb-inset-img">
+          </figure>
+          <div class="blb-disclaimer">
+            <svg data-element-type="icon" data-icon-type="svg" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" class="blb-disclaimer-icon">
+              <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"></circle>
+              <path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+            </svg>
+            <span>All titles use sample data. Movie Fox does not host or distribute any copyrighted content.</span>
+          </div>
+          <div class="blb-tag-row">
+            <span class="blb-tag">YouTube Trailers</span>
+            <span class="blb-tag">Sample Data</span>
+            <span class="blb-tag">No Copyright</span>
+          </div>
+        </div>
+        <div class="blb-card-glow blb-card-glow--accent" aria-hidden="true"></div>
+      </article>
+
+    </div>
+    <!-- /panels -->
+
+  </div>
+
+  <!-- Bottom divider: misty glow fade -->
+  <div class="blb-divider-wrapper" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1280 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="blb-mist" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0A0A0B" stop-opacity="0"></stop>
+          <stop offset="100%" stop-color="#0A0A0B" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <rect width="1280" height="90" fill="url(#blb-mist)"></rect>
+    </svg>
+  </div>
+
+</section>
+
+<section class="browse-library-reviews-section" data-layout-spec="Browse Library-reviews">
+  <div class="blr-container">
+    <div class="blr-header">
+      <h2 class="blr-title">Loved by Trailer Browsers</h2>
+      <p class="blr-subtitle">Real voices from movie enthusiasts, TV binge fans, and cinema students who've made Movie Fox their go-to discovery platform.</p>
+    </div>
+
+    <div class="blr-cards-grid">
+
+      <!-- Card 1: Movie Enthusiast -->
+      <article class="blr-card">
+        <div class="blr-quote-mark" aria-hidden="true">“</div>
+        <blockquote class="blr-quote-text">
+          The discovery speed here is unreal. I found three hidden gems in under ten minutes — trailers loaded instantly and the browsing flow felt like scrolling through a premium streaming flagship. It's like having the best comedy shows tonight, right at your fingertips.
+        </blockquote>
+        <footer class="blr-card-footer">
+          <div class="blr-avatar-ring">
+            <img data-placeholder="browse-library-reviews-image-1" data-context="Circular portrait of a young adult movie enthusiast, casual and warm expression, soft studio lighting, neutral background, cinematic feel, suitable for a testimonial avatar on a streaming platform website" width="56" height="56" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EMarcus%20T.%2C%20movie%20enthusiast%3C/text%3E%3C/svg%3E" alt="Marcus T., movie enthusiast" class="blr-avatar">
+          </div>
+          <div class="blr-reviewer-info">
+            <span class="blr-reviewer-name">Marcus T.</span>
+            <span class="blr-reviewer-role">Movie Enthusiast</span>
+          </div>
+        </footer>
+      </article>
+
+      <!-- Card 2: TV Binge Fan -->
+      <article class="blr-card">
+        <div class="blr-quote-mark" aria-hidden="true">“</div>
+        <blockquote class="blr-quote-text">
+          That dark immersive design just pulls you in. Every poster feels cinematic and intentional — it's the only trailer browser I've used that actually feels like the shows themselves. Perfect for binge planning your next TV obsession.
+        </blockquote>
+        <footer class="blr-card-footer">
+          <div class="blr-avatar-ring">
+            <img data-placeholder="browse-library-reviews-image-2" data-context="Circular portrait of a woman in her late 20s, friendly and relaxed expression, TV binge watcher vibe, soft natural lighting, clean background, suitable for a testimonial avatar on a dark-themed streaming platform" width="56" height="56" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3EPriya%20K.%2C%20TV%20binge%20fan%3C/text%3E%3C/svg%3E" alt="Priya K., TV binge fan" class="blr-avatar">
+          </div>
+          <div class="blr-reviewer-info">
+            <span class="blr-reviewer-name">Priya K.</span>
+            <span class="blr-reviewer-role">TV Binge Fan</span>
+          </div>
+        </footer>
+      </article>
+
+      <!-- Card 3: Cinema Student -->
+      <article class="blr-card">
+        <div class="blr-quote-mark" aria-hidden="true">“</div>
+        <blockquote class="blr-quote-text">
+          As a cinema student I need quick trailer access across genres. Movie Fox nails it — the layout is clean, the embedded trailers are instant, and the editorial grid makes it easy to study different styles from drama to sci-fi in one session.
+        </blockquote>
+        <footer class="blr-card-footer">
+          <div class="blr-avatar-ring">
+            <img data-placeholder="browse-library-reviews-image-3" data-context="Circular portrait of a young male cinema student, thoughtful and creative expression, wearing casual academic attire, soft warm lighting, clean neutral background, suitable for a testimonial avatar on a streaming media platform" width="56" height="56" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3ELuca%20M.%2C%20cinema%20student%3C/text%3E%3C/svg%3E" alt="Luca M., cinema student" class="blr-avatar">
+          </div>
+          <div class="blr-reviewer-info">
+            <span class="blr-reviewer-name">Luca M.</span>
+            <span class="blr-reviewer-role">Cinema Student</span>
+          </div>
+        </footer>
+      </article>
+
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer"><div class="footer-container"><div class="footer-top"><div class="footer-col footer-brand"><a href="/" class="footer-logo-link"><img src="/assets/movie-fox-entertainment-streaming-media-logo.webp" alt="Movie Fox" class="logo" /></a><p class="footer-tagline">Your premium destination for cinematic discovery. Stream the latest movies, explore curated collections, and never miss a moment worth watching.</p><div class="footer-social"><a href="[facebook_handle]" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="[instagram_handle]" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="[whatsapp_handle]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></div></div><div class="footer-col footer-links"><h4 class="footer-heading"><span class="heading-accent"></span>Quick Links</h4><ul class="footer-nav"><li><a href="/browse"><i class="fas fa-film"></i>Browse Library</a></li><li><a href="/title-detail"><i class="fas fa-play-circle"></i>Title Detail</a></li><li><a href="/favorites"><i class="fas fa-heart"></i>Favorites</a></li></ul></div><div class="footer-col footer-contact-col"><h4 class="footer-heading"><span class="heading-accent"></span>Get In Touch</h4><ul class="footer-contact"><li><span class="contact-icon"><i class="fas fa-envelope"></i></span><span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span></li><li><span class="contact-icon"><i class="fas fa-phone"></i></span><span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span></li><li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span><span class="contact-text">[business_address]</span></a></li></ul></div><div class="footer-col footer-newsletter"><h4 class="footer-heading"><span class="heading-accent"></span>Stay Updated</h4><p class="newsletter-text">Get the latest releases and exclusive content delivered to your inbox.</p><form class="newsletter-form" onsubmit="return false;"><div class="newsletter-input-wrap"><input type="email" placeholder="Enter your email" aria-label="Email address"><button type="submit"><i class="fas fa-arrow-right"></i></button></div></form><div class="footer-badges"><span class="badge"><i class="fas fa-shield-alt"></i> Secure</span><span class="badge"><i class="fas fa-lock"></i> Private</span></div></div></div><div class="footer-divider"></div><div class="footer-bottom"><p class="footer-copyright">© 2026 Movie Fox. All rights reserved.</p><div class="footer-legal"><a href="/privacy">Privacy Policy</a><a href="/terms">Terms &amp; Conditions</a><a href="/accessibility">Accessibility</a><a href="https://zappy5.com" target="_blank" class="zappy-attribution">Generated by Zappy</a></div></div></div></footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script id="zappy-navbar-scroll-effect">
+    (function(){
+      var nb=document.querySelector('nav.navbar,.navbar:not(.zappy-catalog-menu)');
+      var cm=document.querySelector('.zappy-catalog-menu,#zappy-catalog-menu');
+      if(!nb)return;
+      var fb='rgba(245,247,250,0.85)';
+      var th=60;
+      var rs=getComputedStyle(document.documentElement);
+      var td=rs.getPropertyValue('--text-dark').trim()||'#1a1a1a';
+      var tl=rs.getPropertyValue('--text-light').trim()||'#ffffff';
+      var st=true?td:tl;
+      nb.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease,box-shadow 0.3s ease';
+      if(cm)cm.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease';
+      var neSel='a,.navbar-brand,.navbar-brand a,.dropdown-toggle,.mobile-toggle,.phone-header-btn,.mobile-hamburger-btn,.mobile-close-btn,.mobile-submenu-toggle,.nav-link';
+      var skipCls=['cart-link','login-link','nav-search-toggle','search-toggle'];
+      function sTC(c,clr){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){var sk=false;if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu')){sk=true;}for(var j=0;j<skipCls.length;j++){if(els[i].classList.contains(skipCls[j])){sk=true;break;}}if(!sk)els[i].style.setProperty('color',clr,'important');}}
+      function cTC(c){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu'))continue;els[i].style.removeProperty('color');}}
+      function applyScrolled(){
+        nb.classList.add('scrolled');
+        if(window.innerWidth>768){
+          nb.style.setProperty('--frosted-text',st);
+          nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('background-color',fb,'important');
+          nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+        }
+        if(cm){cm.classList.add('scrolled');if(window.innerWidth>768){cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}}
+      }
+      function onS(){
+        if(window._zappyNavNoDarkHero) return;
+        if(window.innerWidth<=768){nb.classList.remove('scrolled');cTC(nb);if(cm){cm.classList.remove('scrolled');cTC(cm);}return;}
+        var y=window.scrollY||window.pageYOffset;
+        if(y>th){
+          nb.classList.add('scrolled');nb.style.setProperty('background-color',fb,'important');nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('--frosted-text',st);nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+          if(cm){cm.classList.add('scrolled');cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}
+        }else{
+          nb.classList.remove('scrolled');nb.style.setProperty('background-color','transparent','important');nb.style.removeProperty('background-image');
+          nb.style.removeProperty('--frosted-text');nb.style.backdropFilter='none';nb.style.webkitBackdropFilter='none';nb.style.boxShadow='none';
+          cTC(nb);
+          if(cm){cm.classList.remove('scrolled');cm.style.setProperty('background','transparent','important');cm.style.setProperty('backdrop-filter','none','important');cm.style.setProperty('-webkit-backdrop-filter','none','important');cTC(cm);}
+        }
+      }
+      function sLum(rv,gv,bv){rv/=255;gv/=255;bv/=255;rv=rv<=0.03928?rv/12.92:Math.pow((rv+0.055)/1.055,2.4);gv=gv<=0.03928?gv/12.92:Math.pow((gv+0.055)/1.055,2.4);bv=bv<=0.03928?bv/12.92:Math.pow((bv+0.055)/1.055,2.4);return 0.2126*rv+0.7152*gv+0.0722*bv;}
+      window.addEventListener('scroll',onS,{passive:true});
+      window.addEventListener('resize',onS,{passive:true});
+      onS();
+      var heroEl=document.querySelector('section[class*="hero"],[data-hero-type],main>section:first-child');
+      var hasDH=false;
+      if(heroEl){var hCs=getComputedStyle(heroEl);var hBI=hCs.backgroundImage;if(hBI&&hBI!=='none'){if(hBI.indexOf('url(')!==-1){var hM2=hCs.backgroundColor.match(/\d+/g);if(hM2&&hM2.length>=3){hasDH=sLum(parseInt(hM2[0]),parseInt(hM2[1]),parseInt(hM2[2]))<0.4;}else{hasDH=true;}}else if(hBI.indexOf('gradient')!==-1){var cM=hBI.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g);if(cM&&cM.length>0){var tLm=0;for(var ci=0;ci<cM.length;ci++){var pts=cM[ci].match(/\d+/g);tLm+=sLum(parseInt(pts[0]),parseInt(pts[1]),parseInt(pts[2]));}hasDH=(tLm/cM.length)<0.4;}else{hasDH=true;}}else{hasDH=true;}}else{var hM=hCs.backgroundColor.match(/\d+/g);if(hM&&hM.length>=3){hasDH=sLum(parseInt(hM[0]),parseInt(hM[1]),parseInt(hM[2]))<0.4;}}}
+      if(!hasDH){window.removeEventListener('scroll',onS);window.removeEventListener('resize',onS);applyScrolled();window._zappyNavNoDarkHero=true;}
+    })();
+    </script>
+
+    <script id="zappy-mobile-lang-menu-script">
+    (function() {
+      function initMobileLangMenu() {
+        if (window.innerWidth > 768) {
+          var existingMenu = document.querySelector('.mobile-lang-menu');
+          if (existingMenu) existingMenu.remove();
+          return;
+        }
+        if (document.querySelector('.mobile-lang-menu')) return;
+        var switcher = document.querySelector('.lang-switcher');
+        if (!switcher) return;
+        var dropdown = switcher.querySelector('.lang-switcher-dropdown');
+        if (!dropdown) return;
+        var options = dropdown.querySelectorAll('.lang-option');
+        if (options.length === 0) return;
+        var navMenu = document.getElementById('navMenu') || document.querySelector('.nav-menu') || document.querySelector('nav ul');
+        if (!navMenu) return;
+        var currentLang = document.documentElement.lang || 'en';
+        var langConfigs = {
+          he: {name:'עברית',flag:'https://api.iconify.design/circle-flags/il.svg'},
+          en: {name:'English',flag:'https://api.iconify.design/circle-flags/us.svg'},
+          ar: {name:'العربية',flag:'https://api.iconify.design/circle-flags/sa.svg'},
+          fr: {name:'Français',flag:'https://api.iconify.design/circle-flags/fr.svg'},
+          es: {name:'Español',flag:'https://api.iconify.design/circle-flags/es.svg'},
+          de: {name:'Deutsch',flag:'https://api.iconify.design/circle-flags/de.svg'},
+          ru: {name:'Русский',flag:'https://api.iconify.design/circle-flags/ru.svg'},
+          zh: {name:'中文',flag:'https://api.iconify.design/circle-flags/cn.svg'},
+          ja: {name:'日本語',flag:'https://api.iconify.design/circle-flags/jp.svg'},
+          pt: {name:'Português',flag:'https://api.iconify.design/circle-flags/br.svg'},
+          it: {name:'Italiano',flag:'https://api.iconify.design/circle-flags/it.svg'},
+          ko: {name:'한국어',flag:'https://api.iconify.design/circle-flags/kr.svg'}
+        };
+        var container = document.createElement('div');
+        container.className = 'mobile-lang-menu';
+        var currentConfig = langConfigs[currentLang] || {name:currentLang,flag:''};
+        var toggleBtn = document.createElement('button');
+        toggleBtn.className = 'mobile-lang-toggle';
+        toggleBtn.type = 'button';
+        var currentFlagHtml = currentConfig.flag ? '<img src="' + currentConfig.flag + '" width="20" height="20" alt="" style="border-radius:50%;margin-right:8px;margin-left:8px;">' : '';
+        toggleBtn.innerHTML = currentFlagHtml + currentConfig.name;
+        container.appendChild(toggleBtn);
+        var optionsDiv = document.createElement('div');
+        optionsDiv.className = 'mobile-lang-options';
+        var currentLink = document.createElement('a');
+        currentLink.className = 'mobile-lang-option active';
+        currentLink.href = '#';
+        currentLink.innerHTML = currentFlagHtml + currentConfig.name;
+        optionsDiv.appendChild(currentLink);
+        options.forEach(function(opt) {
+          var link = document.createElement('a');
+          link.className = 'mobile-lang-option';
+          link.href = opt.getAttribute('href');
+          link.innerHTML = opt.innerHTML;
+          optionsDiv.appendChild(link);
+        });
+        container.appendChild(optionsDiv);
+        navMenu.appendChild(container);
+        toggleBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleBtn.classList.toggle('expanded');
+          optionsDiv.classList.toggle('expanded');
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileLangMenu); }
+      else { initMobileLangMenu(); }
+      window.addEventListener('resize', function() { clearTimeout(window._mlrt); window._mlrt = setTimeout(initMobileLangMenu, 250); });
+    })();
+    </script>
+</body>
+</html>

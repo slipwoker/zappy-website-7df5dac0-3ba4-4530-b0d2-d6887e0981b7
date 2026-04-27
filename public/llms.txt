@@ -1,0 +1,47 @@
+# Business — Generative Engine Optimization Map
+
+---
+
+## Pages
+
+### Home
+https://example.com
+Dive into Movie Fox, the ultimate trailer hub for movies and TV. Catch the Dave Chappelle Show, browse comedy shows tonight, and explore cinematic greatness now.
+
+### Browse Library
+https://example.com/browse
+Explore every genre in Movie Fox&#39;s full library. From adam sandler stand up to blockbuster films, find your next obsession with real-time search and scrollable rows.
+
+### Title Detail
+https://example.com/title-detail
+Get the full scoop on any title at Movie Fox. Watch embedded YouTube trailers, read descriptions, and discover kevin hart stand up and more iconic comedy specials instantly.
+
+### Favorites
+https://example.com/favorites
+Never lose track of your must-watch list. Movie Fox saves your favorite titles locally — from the Dave Chappelle Show to the hottest comedy shows tonight — ready anytime.
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+# Business Context (for LLM understanding)
+
+## About Business
+---
+
+# Additional Resources
+
+- **Sitemap**: https://example.com/sitemap.xml
+- **Robots.txt**: https://example.com/robots.txt
